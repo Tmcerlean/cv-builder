@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../styles/EducationSection.css'
 import EducationHistoryItem from './EducationHistoryItem';
 
-class EducationSection extends React.Component {
+const EducationSection = () => {
 
-    state = {
+    const [state, setState] = useState({
         school: '',
         degree: '',
         startStudy: '',
@@ -12,49 +12,53 @@ class EducationSection extends React.Component {
         studyDescription: '',
         educationList: [],
         showForm: true
-    }
+    });
 
-    handleChange = (e) => {
-		this.setState({
-			[e.target.name]: e.target.value
+    const handleChange = (e) => {
+		setState({
+            ...state, 
+            [e.target.name]: e.target.value
         });
     }
     
-    handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        this.setState({
-            educationList: this.state.educationList.concat({
-                school: this.state.school,
-                degree: this.state.degree,
-                startStudy: this.state.startStudy,
-                endStudy: this.state.endStudy,
-                studyDescription: this.state.studyDescription
+        setState({
+            ...state,
+            educationList: state.educationList.concat({
+                school: state.school,
+                degree: state.degree,
+                startStudy: state.startStudy,
+                endStudy: state.endStudy,
+                studyDescription: state.studyDescription
             }),
             school: '',
             degree: '',
             startStudy: '',
             endStudy: '',
             studyDescription: '',
-            showForm: !this.state.showForm
+            showForm: !state.showForm
         })
     }
 
-    deleteTask = (index) => {
+    const deleteTask = (index) => {
 
-        let newEducationList = this.state.educationList;
+        let newEducationList = state.educationList;
         newEducationList.splice(index, 1)
 
-        this.setState({
+        setState({
+            ...state,
             educationList: newEducationList,
         })
     }
 
-    editTask = (education, index) => {
+    const editTask = (education, index) => {
 
-        let newEducationList = this.state.educationList;
+        let newEducationList = state.educationList;
         newEducationList.splice(index, 1)
 
-        this.setState({
+        setState({
+            ...state,
             school: education.school,
             degree: education.degree,
             startStudy: education.startStudy,
@@ -64,68 +68,67 @@ class EducationSection extends React.Component {
         })
     }
 
-    render() {
-        return (
-            <div className="education-section">
-                <h2 className="section-header">Education</h2>
-                <form className="section-form" onSubmit={this.handleSubmit}>
-                    <div className="two-fields">
-                        <div className="field">
-                            <label className="field-label">School</label>
-                            <input
-                                name="school" 
-                                className="half-width-input" 
-                                onChange={this.handleChange}
-                                value={this.state.school}>
-                            </input>
-                        </div>
-                        <div className="field">
-                            <label className="field-label">Degree</label>
-                            <input 
-                                name="degree"
-                                className="half-width-input" 
-                                onChange={this.handleChange}
-                                value={this.state.degree}>
-                            </input>
-                        </div>
+    return (
+        <div className="education-section">
+            <h2 className="section-header">Education</h2>
+            <form className="section-form" onSubmit={handleSubmit}>
+                <div className="two-fields">
+                    <div className="field">
+                        <label className="field-label">School</label>
+                        <input
+                            name="school" 
+                            className="half-width-input" 
+                            onChange={handleChange}
+                            value={state.school}>
+                        </input>
                     </div>
-                    <div className="two-fields">
-                        <div className="field">
-                            <label className="field-label">Start Date</label>
-                            <input 
-                                name="startStudy"
-                                className="half-width-input"
-                                type="date"
-                                onChange={this.handleChange}
-                                value={this.state.startStudy}>   
-                            </input>
-                        </div>
-                        <div className="field">
-                            <label className="field-label">End Date</label>
-                            <input 
-                                name="endStudy"
-                                className="half-width-input"
-                                type="date"
-                                onChange={this.handleChange}
-                                value={this.state.endStudy}> 
-                            </input>
-                        </div>
+                    <div className="field">
+                        <label className="field-label">Degree</label>
+                        <input 
+                            name="degree"
+                            className="half-width-input" 
+                            onChange={handleChange}
+                            value={state.degree}>
+                        </input>
                     </div>
-                    <div className="description-field">
-                        <label className="field-label">Description</label>
-                        <textarea 
-                            name="studyDescription"
-                            className="textarea-input"
+                </div>
+                <div className="two-fields">
+                    <div className="field">
+                        <label className="field-label">Start Date</label>
+                        <input 
+                            name="startStudy"
+                            className="half-width-input"
                             type="date"
-                            onChange={this.handleChange}
-                            value={this.state.studyDescription}>   
-                        </textarea>
+                            onChange={handleChange}
+                            value={state.startStudy}>   
+                        </input>
                     </div>
-                    <div onClick={this.handleSubmit} className="add-div">+ Add Education</div>
-                </form>
-                <EducationHistoryItem educationList={this.state.educationList} deleteTask={this.deleteTask} editTask={this.editTask}/>
-            </div>
-        )};
+                    <div className="field">
+                        <label className="field-label">End Date</label>
+                        <input 
+                            name="endStudy"
+                            className="half-width-input"
+                            type="date"
+                            onChange={handleChange}
+                            value={state.endStudy}> 
+                        </input>
+                    </div>
+                </div>
+                <div className="description-field">
+                    <label className="field-label">Description</label>
+                    <textarea 
+                        name="studyDescription"
+                        className="textarea-input"
+                        type="date"
+                        onChange={handleChange}
+                        value={state.studyDescription}>   
+                    </textarea>
+                </div>
+                <div onClick={handleSubmit} className="add-div">+ Add Education</div>
+            </form>
+            <EducationHistoryItem educationList={state.educationList} deleteTask={deleteTask} editTask={editTask}/>
+        </div>
+    );
 };
 
 export default EducationSection;

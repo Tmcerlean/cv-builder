@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../styles/WorkSection.css';
 import EmploymentHistoryItem from './EmploymentHistoryItem';
 
-class WorkSection extends React.Component {
+const WorkSection = () => {
 
-    state = {  
+    const [state, setState] = useState({
         role: '',
         company: '',
         startEmployment: '',
@@ -12,49 +12,53 @@ class WorkSection extends React.Component {
         jobDescription: '',
         employmentList: [],
         showForm: true
-    }
+    });
 
-    handleChange = (e) => {
-		this.setState({
+    const handleChange = (e) => {
+		setState({
+            ...state, 
             [e.target.name]: e.target.value
         });
     }
     
-    handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        this.setState({
-            employmentList: this.state.employmentList.concat({
-                role: this.state.role,
-                company: this.state.company,
-                startEmployment: this.state.startEmployment,
-                endEmployment: this.state.endEmployment,
-                jobDescription: this.state.jobDescription
+        setState({
+            ...state,
+            employmentList: state.employmentList.concat({
+                role: state.role,
+                company: state.company,
+                startEmployment: state.startEmployment,
+                endEmployment: state.endEmployment,
+                jobDescription: state.jobDescription
             }),
             role: '',
             company: '',
             startEmployment: '',
             endEmployment: '',
             jobDescription: '',
-            showForm: !this.state.showForm
+            showForm: !state.showForm
         })
     }
 
-    deleteTask = (index) => {
+    const deleteTask = (index) => {
 
-        let newEmploymentList = this.state.employmentList;
+        let newEmploymentList = state.employmentList;
         newEmploymentList.splice(index, 1)
 
-        this.setState({
+        setState({
+            ...state,
             employmentList: newEmploymentList,
         })
     }
 
-    editTask = (employment, index) => {
+    const editTask = (employment, index) => {
 
-        let newEmploymentList = this.state.employmentList;
+        let newEmploymentList = state.employmentList;
         newEmploymentList.splice(index, 1)
 
-        this.setState({
+        setState({
+            ...state,
             role: employment.role,
             company: employment.company,
             startEmployment: employment.startEmployment,
@@ -64,68 +68,67 @@ class WorkSection extends React.Component {
         })
     }
 
-    render() {
-        return (
-            <div className="work-section">
-                <h2 className="section-header">Employment History</h2>
-                <form className="section-form" onSubmit={this.handleSubmit}>
-                    <div className="two-fields">
-                        <div className="field">
-                            <label className="field-label">Job Title</label>
-                            <input
-                                name="role" 
-                                className="half-width-input" 
-                                onChange={this.handleChange}
-                                value={this.state.role}>
-                            </input>
-                        </div>
-                        <div className="field">
-                            <label className="field-label">Employer</label>
-                            <input 
-                                name="company"
-                                className="half-width-input" 
-                                onChange={this.handleChange}
-                                value={this.state.company}>
-                            </input>
-                        </div>
+    return (
+        <div className="work-section">
+            <h2 className="section-header">Employment History</h2>
+            <form className="section-form" onSubmit={handleSubmit}>
+                <div className="two-fields">
+                    <div className="field">
+                        <label className="field-label">Job Title</label>
+                        <input
+                            name="role" 
+                            className="half-width-input" 
+                            onChange={handleChange}
+                            value={state.role}>
+                        </input>
                     </div>
-                    <div className="two-fields">
-                        <div className="field">
-                            <label className="field-label">Start Date</label>
-                            <input 
-                                name="startEmployment"
-                                className="half-width-input"
-                                type="date"
-                                onChange={this.handleChange}
-                                value={this.state.startEmployment}>   
-                            </input>
-                        </div>
-                        <div className="field">
-                            <label className="field-label">End Date</label>
-                            <input 
-                                name="endEmployment"
-                                className="half-width-input"
-                                type="date"
-                                onChange={this.handleChange}
-                                value={this.state.endEmployment}> 
-                            </input>
-                        </div>
+                    <div className="field">
+                        <label className="field-label">Employer</label>
+                        <input 
+                            name="company"
+                            className="half-width-input" 
+                            onChange={handleChange}
+                            value={state.company}>
+                        </input>
                     </div>
-                    <div className="description-field">
-                        <label className="field-label">Description</label>
-                        <textarea 
-                            name="jobDescription"
-                            className="textarea-input"
+                </div>
+                <div className="two-fields">
+                    <div className="field">
+                        <label className="field-label">Start Date</label>
+                        <input 
+                            name="startEmployment"
+                            className="half-width-input"
                             type="date"
-                            onChange={this.handleChange}
-                            value={this.state.jobDescription}>   
-                        </textarea>
+                            onChange={handleChange}
+                            value={state.startEmployment}>   
+                        </input>
                     </div>
-                    <div onClick={this.handleSubmit} className="add-div">+ Add Employment</div>
-                </form>
-                <EmploymentHistoryItem employmentList={this.state.employmentList} deleteTask={this.deleteTask} editTask={this.editTask}/>
-            </div>
-        )};
+                    <div className="field">
+                        <label className="field-label">End Date</label>
+                        <input 
+                            name="endEmployment"
+                            className="half-width-input"
+                            type="date"
+                            onChange={handleChange}
+                            value={state.endEmployment}> 
+                        </input>
+                    </div>
+                </div>
+                <div className="description-field">
+                    <label className="field-label">Description</label>
+                    <textarea 
+                        name="jobDescription"
+                        className="textarea-input"
+                        type="date"
+                        onChange={handleChange}
+                        value={state.jobDescription}>   
+                    </textarea>
+                </div>
+                <div onClick={handleSubmit} className="add-div">+ Add Employment</div>
+            </form>
+            <EmploymentHistoryItem employmentList={state.employmentList} deleteTask={deleteTask} editTask={editTask}/>
+        </div>
+    )
 };
 
 export default WorkSection;
